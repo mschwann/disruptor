@@ -1,2 +1,1 @@
-add_subdirectory(modern_library)
-add_subdirectory(apps)
+add_subdirectory(circularbuffer)

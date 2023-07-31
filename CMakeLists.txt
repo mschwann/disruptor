@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.14...3.27)
 
 # Project name and a few useful settings. Other commands can pick up the results
 project(
-  ModernCMakeExample
-  VERSION 0.1
-  DESCRIPTION "An example project with CMake"
+  Disruptor
+  VERSION 0.0.0
+  DESCRIPTION "Experiments with disruptor"
   LANGUAGES CXX)
 
 # Only do these if this is the main project, and not if it is included through add_subdirectory
@@ -32,15 +32,15 @@ include(FetchContent)
 
 # Accumulator library
 # This is header only, so could be replaced with git submodules or FetchContent
-find_package(Boost REQUIRED)
+#find_package(Boost REQUIRED)
 # Adds Boost::boost
 
 # Formatting library
-FetchContent_Declare(
-  fmtlib
-  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-  GIT_TAG 5.3.0)
-FetchContent_MakeAvailable(fmtlib)
+#FetchContent_Declare(
+#  fmtlib
+#  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+#  GIT_TAG 5.3.0)
+#FetchContent_MakeAvailable(fmtlib)
 # Adds fmt::fmt
 
 include(cmake/setup.cmake)
