@@ -34,9 +34,11 @@ class CircularBuffer : public ::CircularBuffer<CircularBuffer>
         , read_(0)
         , write_(0)
         , size_(n)
-        {}  
-        virtual bool pushByteImpl(uint8_t& item);
-        virtual bool popByteImpl(uint8_t& item);
+        {}
+        using ::CircularBuffer<CircularBuffer>::popByte;
+        using ::CircularBuffer<CircularBuffer>::pushByte;
+        virtual bool pushByteImpl(uint8_t& item) override;
+        virtual bool popByteImpl(uint8_t& item) override;
     private:
         std::vector<size_t> mem_;
         std::atomic<size_t> read_;

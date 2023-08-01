@@ -8,6 +8,8 @@ project(
   DESCRIPTION "Experiments with disruptor"
   LANGUAGES CXX)
 
+include(FetchContent)
+
 # Only do these if this is the main project, and not if it is included through add_subdirectory
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
@@ -19,21 +21,13 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   # Let's nicely support folders in IDEs
   set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-  # Testing only available if this is the main app
-  # Note this needs to be done in the main CMakeLists
-  # since it calls enable_testing, which must be in the
-  # main CMakeLists.
-  include(CTest)
+  FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG        release-1.12.1
+  )
+  FetchContent_MakeAvailable(googletest)
 endif()
-
-# FetchContent added in CMake 3.11, downloads during the configure step
-# FetchContent_MakeAvailable was added in CMake 3.14; simpler usage
-include(FetchContent)
-
-# Accumulator library
-# This is header only, so could be replaced with git submodules or FetchContent
-#find_package(Boost REQUIRED)
-# Adds Boost::boost
 
 # Formatting library
 #FetchContent_Declare(
