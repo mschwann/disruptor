@@ -23,6 +23,42 @@ template<class Impl> class CircularBuffer
 
 };
 
+namespace MultiProducer::MultiConsumer
+{
+    struct ReserveCommitPair
+    {
+        ReserveCommitPair(size_t r, size_t c)
+        :reserve(r)
+        ,commit(c){}
+            
+        std::atomic<size_t> reserve;
+        std::atomic<size_t> commit;
+    };
+
+    class CircularBuffer : public ::CircularBuffer<CircularBuffer>
+    {
+        public:
+        CircularBuffer(size_t n)
+        : ::CircularBuffer<CircularBuffer>()
+        , mem_(n)
+        , read_(0, 0)
+        , write_(0, 0)
+        , size_(n)
+        {}
+        using ::CircularBuffer<CircularBuffer>::popByte;
+        using ::CircularBuffer<CircularBuffer>::pushByte;
+        
+        virtual bool pushByteImpl(uint8_t& item) override;
+        virtual bool popByteImpl(uint8_t& item) override;
+        
+        private:
+        std::vector<size_t> mem_;
+        ReserveCommitPair read_;
+        ReserveCommitPair write_;
+        size_t size_;    
+    };
+}
+
 namespace SingleProducer::SingleConsumer
 {
 class CircularBuffer : public ::CircularBuffer<CircularBuffer>

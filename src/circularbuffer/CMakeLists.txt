@@ -2,7 +2,10 @@ setup_component()
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
   
 # Make an automatic library - will be static or dynamic based on user setting
-add_library(circularbuffer 1p1c_circularbuffer.cpp)
+add_library(circularbuffer 
+    1p1c_circularbuffer.cpp
+    mpmc_circularbuffer.cpp
+)
 
 # We need this directory, and users of our library will need it too
 target_include_directories(circularbuffer PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
