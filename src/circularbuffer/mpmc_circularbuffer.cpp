@@ -22,12 +22,20 @@ namespace MultiProducer::MultiConsumer
                 return false;
             }
         }
-        while(!write_.reserve.compare_exchange_weak(oldWrite, newWrite));
+        while(!write_.reserve.compare_exchange_weak(oldWrite, newWrite, std::memory_order_acquire, std::memory_order_release));
         mem_[oldWrite] = std::move(item);
         
         //this synchronises :(
-        while(write_.commit.load() != oldWrite);
-        write_.commit.store(newWrite);
+        /*size_t tmp;
+        do{
+            tmp = oldWrite;
+        }
+        while(!write_.commit.compare_exchange_weak(tmp, newWrite, std::memory_order_acquire, std::memory_order_release));
+        */
+
+        while(write_.commit.load(std::memory_order_acquire) != oldWrite)
+            std::this_thread::yield();
+        write_.commit.store(newWrite, std::memory_order_release);
         return true;
     }
 
@@ -43,11 +51,21 @@ namespace MultiProducer::MultiConsumer
             }
             newRead = (oldRead + 1) % size_;
         }
-        while(!read_.reserve.compare_exchange_weak(oldRead, newRead));
+        while(!read_.reserve.compare_exchange_weak(oldRead, newRead, std::memory_order_acquire, std::memory_order_release));
         item = std::move(mem_[oldRead]);
 
-        while(read_.commit.load() != oldRead);
-        read_.commit.store(newRead);
+        while(read_.commit.load(std::memory_order_acquire) != oldRead)
+            std::this_thread::yield();
+        read_.commit.store(newRead, std::memory_order_release);
+        
+        /*size_t tmp;
+        do{
+            tmp = oldRead;
+        }
+        while(!write_.commit.compare_exchange_weak(tmp, newRead, std::memory_order_acquire, std::memory_order_release));
+        */
+
+
         return true;
     }
 }

@@ -57,7 +57,7 @@ namespace MultiProducer::MultiConsumer
         std::vector<size_t> mem_;
         ReserveCommitPair read_;
         ReserveCommitPair write_;
-        size_t size_;    
+        size_t size_;
     };
 }
 
