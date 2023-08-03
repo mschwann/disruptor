@@ -27,6 +27,13 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     GIT_TAG        release-1.12.1
   )
   FetchContent_MakeAvailable(googletest)
+
+  FetchContent_Declare(
+    benchmark
+    GIT_REPOSITORY  https://github.com/google/benchmark.git
+    GIT_TAG         v1.8.2
+  )
+  FetchContent_MakeAvailable(benchmark)
 endif()
 
 # Formatting library

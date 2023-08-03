@@ -19,6 +19,16 @@ TEST(cb1p1c, BasicSingleReadWrite) {
     EXPECT_EQ(dst, 13);
 }
 
+//CirculatBuffer1Producer1Consumer
+TEST(cbmpmc, BasicSingleReadWrite) {
+    MultiProducer::MultiConsumer::CircularBuffer buff(16);
+    uint8_t src = 12;
+    EXPECT_EQ(buff.pushByte(src), true);
+    uint8_t dst;
+    EXPECT_EQ(buff.popByte(dst), true);
+    EXPECT_EQ(dst, 12);
+}
+
 TEST(cbmpmc, MultiWriteConsistency) {
     MultiProducer::MultiConsumer::CircularBuffer buff(64);
     std::vector<uint8_t> vals(32);

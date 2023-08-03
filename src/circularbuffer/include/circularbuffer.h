@@ -27,12 +27,14 @@ namespace MultiProducer::MultiConsumer
 {
     struct ReserveCommitPair
     {
-        ReserveCommitPair(size_t r, size_t c)
+        ReserveCommitPair(size_t r, size_t c, size_t n)
         :reserve(r)
-        ,commit(c){}
+        ,commit(c)
+        {}
             
         std::atomic<size_t> reserve;
         std::atomic<size_t> commit;
+
     };
 
     class CircularBuffer : public ::CircularBuffer<CircularBuffer>
@@ -41,8 +43,8 @@ namespace MultiProducer::MultiConsumer
         CircularBuffer(size_t n)
         : ::CircularBuffer<CircularBuffer>()
         , mem_(n)
-        , read_(0, 0)
-        , write_(0, 0)
+        , read_(0, 0, n)
+        , write_(0, 0, n)
         , size_(n)
         {}
         using ::CircularBuffer<CircularBuffer>::popByte;

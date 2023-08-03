@@ -1,6 +1,14 @@
+#include <thread>
 #include "circularbuffer.h"
 namespace MultiProducer::MultiConsumer
 {
+    /*
+    
+    Multiple commit heads - linked list.
+    Commit head, once "reached" by read could just go into a common space to be reused.
+
+    How about a Linked list of memory, where one could return it to the pool ?
+    */
     bool CircularBuffer::pushByteImpl(uint8_t& item)
     {
         size_t oldWrite = write_.reserve.load(std::memory_order_acquire);
@@ -16,8 +24,8 @@ namespace MultiProducer::MultiConsumer
         }
         while(!write_.reserve.compare_exchange_weak(oldWrite, newWrite));
         mem_[oldWrite] = std::move(item);
-        //Here comes a problem, that effectivly synchronises the loop.
-        //Wait for it to get to desired commit values
+        
+        //this synchronises :(
         while(write_.commit.load() != oldWrite);
         write_.commit.store(newWrite);
         return true;
@@ -37,6 +45,7 @@ namespace MultiProducer::MultiConsumer
         }
         while(!read_.reserve.compare_exchange_weak(oldRead, newRead));
         item = std::move(mem_[oldRead]);
+
         while(read_.commit.load() != oldRead);
         read_.commit.store(newRead);
         return true;

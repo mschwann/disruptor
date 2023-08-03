@@ -17,3 +17,4 @@ target_include_directories(circularbuffer PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/inc
 target_compile_features(circularbuffer PUBLIC cxx_std_20)
 
 add_subdirectory(tests)
+add_subdirectory(bench)
