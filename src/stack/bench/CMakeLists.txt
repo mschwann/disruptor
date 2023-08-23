@@ -1,4 +1,4 @@
-set(BINARY linkedlist_bench)
+set(BINARY stack_bench)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false *.h *.cpp)
 

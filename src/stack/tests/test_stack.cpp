@@ -3,10 +3,10 @@
 
 
 TEST(Stack, BasicSingleReadWrite) {
-    Stack<uint8_t> ll;
+    Stack::WaitFree::Stack<uint8_t> ll;
     for(size_t i =0; i < 16; i++)
     {
-        Node<uint8_t>* n = new Node<uint8_t>(i, nullptr);
+        Stack::Node<uint8_t>* n = new Stack::Node<uint8_t>(i, nullptr);
         ll.push(n);
     }
 
