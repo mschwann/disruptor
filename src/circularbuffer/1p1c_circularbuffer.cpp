@@ -1,8 +1,8 @@
-#include "circularbuffer.h"
-namespace SingleProducer::SingleConsumer
+#include "singleconsumersingleproducer.h"
+namespace CircularBuffer
 {
 
-    bool CircularBuffer::pushByteImpl(uint8_t& item)
+    bool SingleConsumerSingleProducer::pushByteImpl(uint8_t& item)
     {
         auto oldWrite = write_.load(std::memory_order_acquire);
         auto newWrite = (oldWrite + 1) % size_;
@@ -16,7 +16,7 @@ namespace SingleProducer::SingleConsumer
         return true;
     }
 
-    bool CircularBuffer::popByteImpl(uint8_t& item)
+    bool SingleConsumerSingleProducer::popByteImpl(uint8_t& item)
     {
         size_t readIdx = read_.load(std::memory_order_acquire);
         if(readIdx == write_.load(std::memory_order_acquire))

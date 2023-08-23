@@ -1,4 +1,5 @@
-#include "circularbuffer.h"
+#include "singleconsumersingleproducer.h"
+#include "base.h"
 #include "gtest/gtest.h"
 
 #include <algorithm>
@@ -7,7 +8,7 @@
 
 //CirculatBuffer1Producer1Consumer
 TEST(cb1p1c, BasicSingleReadWrite) {
-    SingleProducer::SingleConsumer::CircularBuffer buff(16);
+    CircularBuffer::SingleConsumerSingleProducer buff(16);
     uint8_t src = 12;
     EXPECT_EQ(buff.pushByte(src), true);
     src = 13;

@@ -3,11 +3,11 @@
 #include <vector>
 #include <atomic>
 
-template<class Impl> class CircularBuffer
+template<class Impl> class CircularBufferBase
 {
     public:
-        CircularBuffer() = default;
-        virtual ~CircularBuffer(){}
+        CircularBufferBase() = default;
+        virtual ~CircularBufferBase(){}
 
         bool pushByte(uint8_t& item)
         {
@@ -37,18 +37,18 @@ namespace MultiProducer::MultiConsumer
 
     };
 
-    class CircularBuffer : public ::CircularBuffer<CircularBuffer>
+    class CircularBuffer : public ::CircularBufferBase<CircularBuffer>
     {
         public:
         CircularBuffer(size_t n)
-        : ::CircularBuffer<CircularBuffer>()
+        : ::CircularBufferBase<CircularBuffer>()
         , mem_(n)
         , read_(0, 0, n)
         , write_(0, 0, n)
         , size_(n)
         {}
-        using ::CircularBuffer<CircularBuffer>::popByte;
-        using ::CircularBuffer<CircularBuffer>::pushByte;
+        using ::CircularBufferBase<CircularBuffer>::popByte;
+        using ::CircularBufferBase<CircularBuffer>::pushByte;
         
         virtual bool pushByteImpl(uint8_t& item) override;
         virtual bool popByteImpl(uint8_t& item) override;
@@ -59,28 +59,4 @@ namespace MultiProducer::MultiConsumer
         ReserveCommitPair write_;
         size_t size_;
     };
-}
-
-namespace SingleProducer::SingleConsumer
-{
-class CircularBuffer : public ::CircularBuffer<CircularBuffer>
-{
-    public:
-        CircularBuffer(size_t n)
-        : ::CircularBuffer<CircularBuffer>()
-        , mem_(n)
-        , read_(0)
-        , write_(0)
-        , size_(n)
-        {}
-        using ::CircularBuffer<CircularBuffer>::popByte;
-        using ::CircularBuffer<CircularBuffer>::pushByte;
-        virtual bool pushByteImpl(uint8_t& item) override;
-        virtual bool popByteImpl(uint8_t& item) override;
-    private:
-        std::vector<size_t> mem_;
-        std::atomic<size_t> read_;
-        std::atomic<size_t> write_;
-        size_t size_;
-};
 }
