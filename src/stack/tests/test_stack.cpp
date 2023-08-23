@@ -1,18 +1,18 @@
-#include "linkedList.h"
+#include <stack/leaky_lockfree.h>
 #include "gtest/gtest.h"
 
 
-TEST(LinkedList, BasicSingleReadWrite) {
-    LinkedList<uint8_t> ll;
+TEST(Stack, BasicSingleReadWrite) {
+    Stack<uint8_t> ll;
     for(size_t i =0; i < 16; i++)
     {
         Node<uint8_t>* n = new Node<uint8_t>(i, nullptr);
-        ll.appendNode(n);
+        ll.push(n);
     }
 
     for(int i =15; i >= 0; i--)
     {
-        EXPECT_EQ(ll.popNode()->value, i);
+        EXPECT_EQ(ll.pop()->value, i);
     }
 }
 

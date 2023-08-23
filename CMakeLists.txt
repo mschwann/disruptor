@@ -7,6 +7,7 @@ project(
   VERSION 0.0.0
   DESCRIPTION "Experiments with disruptor"
   LANGUAGES CXX)
+set(CMAKE_CXX_FLAGS "-O3")
 
 include(FetchContent)
 

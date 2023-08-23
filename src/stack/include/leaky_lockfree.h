@@ -9,21 +9,21 @@ template<typename T> struct Node
     Node* next;
 };
 
-template<class T> class LinkedList
+template<class T> class Stack
 {
     public:
-        LinkedList():
+        Stack():
             head_(nullptr)
         {
         }
-        ~LinkedList()
+        ~Stack()
         {
-            while(Node<T>* n = popNode())
+            while(Node<T>* n = pop())
             {
                 delete n;
             }
         }
-        void appendNode(Node<T>* node)
+        void push(Node<T>* node)
         {
             Node<T>* oldHead = head_.load(std::memory_order_acquire);
             do
@@ -33,7 +33,7 @@ template<class T> class LinkedList
             while(!head_.compare_exchange_weak(oldHead, node, std::memory_order_acquire, std::memory_order_release));            
         }
 
-        Node<T>* popNode()
+        Node<T>* pop()
         {
             Node<T>* oldHead = head_.load(std::memory_order_acquire);
             Node<T>* newHead;
