@@ -1,4 +1,5 @@
 #include "singleconsumersingleproducer.h"
+#include "multiconsumermultiproducer.h"
 #include "base.h"
 #include "gtest/gtest.h"
 
@@ -21,8 +22,8 @@ TEST(cb1p1c, BasicSingleReadWrite) {
 }
 
 //CirculatBuffer1Producer1Consumer
-TEST(cbmpmc, BasicSingleReadWrite) {
-    MultiProducer::MultiConsumer::CircularBuffer buff(16);
+TEST(cbmpmc, BasicMultieReadWrite) {
+    CircularBuffer::MultiConsumerMultiProducer buff(64);
     uint8_t src = 12;
     EXPECT_EQ(buff.pushByte(src), true);
     uint8_t dst;
@@ -31,7 +32,7 @@ TEST(cbmpmc, BasicSingleReadWrite) {
 }
 
 TEST(cbmpmc, MultiWriteConsistency) {
-    MultiProducer::MultiConsumer::CircularBuffer buff(64);
+    CircularBuffer::MultiConsumerMultiProducer buff(64);
     std::vector<uint8_t> vals(32);
     std::generate(std::begin(vals), std::end(vals), [i = 0]() mutable {return i++;});
     std::vector<uint8_t> valsBackup = vals;
