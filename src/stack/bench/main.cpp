@@ -3,22 +3,23 @@
 #include <benchmark/benchmark.h>
 
 
+Stack::WaitFree::Stack<uint8_t> wf;
+Stack::Waiting::Stack<uint8_t> ws;
+  
 
 void BM_stack_waitfree(benchmark::State& state) {
-  Stack::WaitFree::Stack<uint8_t> ll;
   Stack::Node<uint8_t>* node = new Stack::Node<uint8_t>(0);
   for (auto _ : state){
-    ll.push(node);
-    node = ll.pop();
+    wf.push(node);
+    node = wf.pop();
   }
 }
 
 void BM_stack_waiting(benchmark::State& state) {
-  Stack::Waiting::Stack<uint8_t> ll;
   Stack::Node<uint8_t>* node = new Stack::Node<uint8_t>(0);
   for (auto _ : state){
-    ll.push(node);
-    node = ll.pop();
+    ws.push(node);
+    node = ws.pop();
   }
 }
 
