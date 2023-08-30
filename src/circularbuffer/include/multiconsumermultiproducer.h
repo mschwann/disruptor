@@ -1,4 +1,5 @@
 #pragma once
+#include <assert.h>
 #include "base.h"
 
 namespace CircularBuffer
@@ -22,7 +23,9 @@ namespace CircularBuffer
         , read_(0, 0, n)
         , write_(0, 0, n)
         , size_(n)
-        {}
+        {
+            //assert((size_ != 0) && ((size_ & (size_ - 1)) == 0));
+        }
         using ::CircularBufferBase<MultiConsumerMultiProducer>::popByte;
         using ::CircularBufferBase<MultiConsumerMultiProducer>::pushByte;
         

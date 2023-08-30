@@ -6,7 +6,6 @@ namespace CircularBuffer
     {
         size_t oldWrite = write_.reserve.load(std::memory_order_acquire);
         size_t newWrite;
-        //reserver
         do{
             newWrite = (oldWrite + 1) % size_;
             if(newWrite == read_.commit.load(std::memory_order_acquire))

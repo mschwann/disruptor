@@ -2,7 +2,7 @@
 #include "mpmc.h"
 
 
-  CircularBuffer::MultiConsumerMultiProducer buff(64);
+CircularBuffer::MultiConsumerMultiProducer buff(128);
 
 void BM_mpmc_pushpop(benchmark::State& state) {
   uint8_t val = 42;

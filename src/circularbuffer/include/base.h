@@ -4,6 +4,12 @@
 #include <atomic>
 #include <mutex>
 
+/*
+Two more ideas here:
+1 - create a queue
+2 - create a ring of nodes, with a bool for <writen>.
+
+*/
 template<class Impl> class CircularBufferBase
 {
     public:

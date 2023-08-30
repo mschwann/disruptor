@@ -11,7 +11,9 @@ void BM_stack_waitfree(benchmark::State& state) {
   Stack::Node<uint8_t>* node = new Stack::Node<uint8_t>(0);
   for (auto _ : state){
     wf.push(node);
-    node = wf.pop();
+    node = nullptr;
+    while(!node)
+      node = wf.pop();
   }
 }
 

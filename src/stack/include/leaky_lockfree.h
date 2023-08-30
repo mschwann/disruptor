@@ -13,32 +13,32 @@ namespace Stack::WaitFree{
             }
             ~Stack()
             {
-                while(Node<T>* n = pop())
+                /*Node<T>* n = pop();
+                while (n)
                 {
+                    Node<T>* next = n->next;
                     delete n;
-                }
+                    n = next;
+                }*/
             }
             void push(Node<T>* node)
             {
-                Node<T>* oldHead = head_.load(std::memory_order_acquire);
+                Node<T>* oldHead = head_.load(std::memory_order_relaxed);
                 do
                 {
                     node->next = oldHead;
-                } 
-                while(!head_.compare_exchange_weak(oldHead, node, std::memory_order_acquire, std::memory_order_release));            
+                }
+                while (!head_.compare_exchange_weak(oldHead, node, std::memory_order_release, std::memory_order_relaxed));
             }
-
             Node<T>* pop()
             {
-                Node<T>* oldHead = head_.load(std::memory_order_acquire);
-                Node<T>* newHead;
-                do{
-                    if(!oldHead) //Nothing to grab
+                Node<T>* oldHead = nullptr;
+                do {
+                    oldHead = head_.load(std::memory_order_relaxed);
+                    if (!oldHead) // Nothing to grab
                         return nullptr;
-                    newHead = oldHead->next;
-                }
-                while(!head_.compare_exchange_weak(oldHead, newHead, std::memory_order_acquire, std::memory_order_release));
-                oldHead->next = nullptr;
+                } while (!head_.compare_exchange_weak(oldHead, oldHead->next, std::memory_order_relaxed));
+                
                 return oldHead;
             }
         private:
